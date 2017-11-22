@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     tools:context="com.example.christophercoverdale.cryptopricemvvm.MainActivity">
 
-
-
+    <Spinner
+        android:id="@+id/exchanges_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </FrameLayout>

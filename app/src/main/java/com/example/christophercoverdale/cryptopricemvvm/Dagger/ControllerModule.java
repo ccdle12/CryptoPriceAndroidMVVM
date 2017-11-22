@@ -12,7 +12,7 @@ import dagger.Provides;
  */
 
 @Module
-public class FragmentModule
+public class ControllerModule
 {
     @Provides
     @Singleton

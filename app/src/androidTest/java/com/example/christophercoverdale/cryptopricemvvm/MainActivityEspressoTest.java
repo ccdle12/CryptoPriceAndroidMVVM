@@ -1,9 +1,12 @@
 package com.example.christophercoverdale.cryptopricemvvm;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
+import com.example.christophercoverdale.cryptopricemvvm.Dashboard.Dashboard;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,13 +29,8 @@ public class MainActivityEspressoTest
     public ActivityTestRule<MainActivity> mainActivityTestRule =
             new ActivityTestRule<>(MainActivity.class, true, true);
 
+    @NonNull
     private MainActivity mainActivity;
-
-    @Before
-    public void setActivity()
-    {
-        mainActivity = mainActivityTestRule.getActivity();
-    }
 
     @Test
     public void testUseAppContext() throws Exception
@@ -43,14 +41,14 @@ public class MainActivityEspressoTest
     }
 
     @Test
-    public void testFrameLayoutIsVisisble()
+    public void testFrameLayoutIsDisplayed()
     {
         onView(withId(R.id.main_fragment_container)).check(matches(isDisplayed()));
     }
 
-//    @Test
-//    public void testDashboardFragmentIsVisible()
-//    {
-//        onView(withId(R.id.dashboard_fragment)).check(matches(isDisplayed()));
-//    }
+    @Test
+    public void testDashboardFragmentIsDisplayed()
+    {
+        onView(withId(R.id.exchanges_spinner)).check(matches(isDisplayed()));
+    }
 }
