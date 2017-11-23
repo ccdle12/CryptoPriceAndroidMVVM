@@ -1,5 +1,7 @@
 package com.example.christophercoverdale.cryptopricemvvm.dagger;
 
+import com.example.christophercoverdale.cryptopricemvvm.datamodelmanager.DataModelManager;
+
 import javax.inject.Singleton;
 import dagger.Component;
 
@@ -11,5 +13,5 @@ import dagger.Component;
 @Component(modules = {ControllerModule.class})
 public interface ControllerComponent
 {
-//    void inject(MainActivity mainActivity);
+    void inject(DataModelManager dataModelManager);
 }
