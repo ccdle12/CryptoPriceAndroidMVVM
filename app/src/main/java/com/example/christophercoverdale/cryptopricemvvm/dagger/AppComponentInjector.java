@@ -1,7 +1,4 @@
-package com.example.christophercoverdale.cryptopricemvvm.Dagger;
-
-import android.app.Application;
-
+package com.example.christophercoverdale.cryptopricemvvm.dagger;
 /**
  * Created by christophercoverdale on 22/11/2017.
  */
@@ -12,13 +9,14 @@ public class AppComponentInjector
 
     private AppComponentInjector() {}
 
-    public static AppComponent get(Application application)
+    public static AppComponent get()
     {
         if (appComponent == null)
             appComponent = DaggerAppComponent.builder()
-                    .appModule(new AppModule(application)).build();
+                    .appModule(new AppModule()).build();
 
         return appComponent;
 
     }
+
 }

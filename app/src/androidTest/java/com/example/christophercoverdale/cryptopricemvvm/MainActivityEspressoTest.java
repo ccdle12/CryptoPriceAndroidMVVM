@@ -6,9 +6,6 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.christophercoverdale.cryptopricemvvm.Dashboard.Dashboard;
-
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

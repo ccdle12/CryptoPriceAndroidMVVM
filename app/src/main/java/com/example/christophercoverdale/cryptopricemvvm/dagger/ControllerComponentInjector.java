@@ -1,4 +1,4 @@
-package com.example.christophercoverdale.cryptopricemvvm.Dagger;
+package com.example.christophercoverdale.cryptopricemvvm.dagger;
 
 /**
  * Created by christophercoverdale on 22/11/2017.

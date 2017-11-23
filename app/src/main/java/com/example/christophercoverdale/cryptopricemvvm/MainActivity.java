@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.example.christophercoverdale.cryptopricemvvm.Dagger.ControllerComponentInjector;
-import com.example.christophercoverdale.cryptopricemvvm.Dashboard.Dashboard;
+import com.example.christophercoverdale.cryptopricemvvm.dagger.AppComponentInjector;
+import com.example.christophercoverdale.cryptopricemvvm.dashboard.Dashboard;
 
 import javax.inject.Inject;
 
@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity
 {
     @NonNull
     @Inject
-    public Dashboard dashboardFragment;
+    Dashboard dashboardFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ControllerComponentInjector.get().inject(this);
+        AppComponentInjector.get().inject(this);
         setupFragmentInContainer();
     }
 
