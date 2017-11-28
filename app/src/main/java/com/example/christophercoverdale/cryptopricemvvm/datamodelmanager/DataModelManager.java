@@ -7,6 +7,8 @@ import com.example.christophercoverdale.cryptopricemvvm.dagger.AppComponentInjec
 import com.example.christophercoverdale.cryptopricemvvm.datamodel.ExchangesDataModel;
 import com.example.christophercoverdale.cryptopricemvvm.helpers.RestApiHelper;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -39,11 +41,12 @@ public class DataModelManager
      */
     public Observable<ExchangesDataModel> requestExchangeModel()
     {
-        return this.restApiHelper.getUpdatedPricesFromExchanges();
+        return getUpdatedExchanges();
     }
 
-    public Observable<CoinbaseModel> requestCoinbaseModel()
+    private Observable<ExchangesDataModel> getUpdatedExchanges()
     {
-        return this.restApiHelper.getPriceFromCoinbase("BTC");
+        List<Observable<?>> obsList = this.restApiHelper.getUpdatedPricesFromExchanges();
+        return Observable.zip(obsList, (i) -> new ExchangesDataModel(i));
     }
 }

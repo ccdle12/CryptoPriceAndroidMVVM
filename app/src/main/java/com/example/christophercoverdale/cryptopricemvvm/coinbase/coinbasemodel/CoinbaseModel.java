@@ -1,5 +1,6 @@
 package com.example.christophercoverdale.cryptopricemvvm.coinbase.coinbasemodel;
 
+import com.example.christophercoverdale.cryptopricemvvm.datamodel.CoinModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by christophercoverdale on 28/11/2017.
  */
 
-public class CoinbaseModel
+public class CoinbaseModel extends CoinModel
 {
     @SerializedName("base")
     @Expose
