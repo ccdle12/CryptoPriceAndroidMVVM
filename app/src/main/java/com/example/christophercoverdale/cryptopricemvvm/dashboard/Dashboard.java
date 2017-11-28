@@ -8,11 +8,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.christophercoverdale.cryptopricemvvm.R;
+import com.example.christophercoverdale.cryptopricemvvm.adapters.CoinsSpinnerAdapter;
+import com.example.christophercoverdale.cryptopricemvvm.adapters.ExchangesSpinnerAdapter;
 import com.example.christophercoverdale.cryptopricemvvm.dagger.AppComponentInjector;
 
 import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by christophercoverdale on 22/11/2017.
@@ -27,6 +34,19 @@ public class Dashboard extends Fragment
     @Inject
     DashboardViewModel dashboardViewModel;
 
+    @BindView(R.id.exchanges_spinner)
+    Spinner exchangesSpinner;
+
+    @BindView(R.id.coins_spinner)
+    Spinner coinsSpinner;
+
+    @BindView(R.id.coin_price_text_view)
+    TextView coinPrice;
+
+    private ExchangesSpinnerAdapter exchangesSpinnerAdapter;
+
+    private CoinsSpinnerAdapter coinsSpinnerAdapter;
+
 
     /**
      * Lifecycle
@@ -37,6 +57,7 @@ public class Dashboard extends Fragment
                              @Nullable Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.dashboard, container, false);
+        ButterKnife.bind(this, rootView);
 
         return rootView;
     }
@@ -46,6 +67,5 @@ public class Dashboard extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
         AppComponentInjector.get().inject(this);
-
     }
 }

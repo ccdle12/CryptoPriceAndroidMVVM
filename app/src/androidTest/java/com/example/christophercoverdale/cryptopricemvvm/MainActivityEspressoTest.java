@@ -26,9 +26,6 @@ public class MainActivityEspressoTest
     public ActivityTestRule<MainActivity> mainActivityTestRule =
             new ActivityTestRule<>(MainActivity.class, true, true);
 
-    @NonNull
-    private MainActivity mainActivity;
-
     @Test
     public void testUseAppContext() throws Exception
     {
@@ -43,9 +40,4 @@ public class MainActivityEspressoTest
         onView(withId(R.id.main_fragment_container)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testDashboardFragmentIsDisplayed()
-    {
-        onView(withId(R.id.exchanges_spinner)).check(matches(isDisplayed()));
-    }
 }
