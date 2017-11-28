@@ -2,9 +2,12 @@ package com.example.christophercoverdale.cryptopricemvvm.datamodelmanager;
 
 import android.support.annotation.NonNull;
 
-import com.example.christophercoverdale.cryptopricemvvm.dagger.ControllerComponentInjector;
+import com.example.christophercoverdale.cryptopricemvvm.coinbase.coinbasemodel.CoinbaseModel;
+import com.example.christophercoverdale.cryptopricemvvm.dagger.AppComponentInjector;
 import com.example.christophercoverdale.cryptopricemvvm.datamodel.ExchangesDataModel;
 import com.example.christophercoverdale.cryptopricemvvm.helpers.RestApiHelper;
+
+import javax.inject.Inject;
 
 import rx.Observable;
 
@@ -18,7 +21,8 @@ public class DataModelManager
      * Instance Variables
      */
     @NonNull
-    private RestApiHelper restApiHelper;
+    @Inject
+    public RestApiHelper restApiHelper;
 
 
     /**
@@ -26,7 +30,8 @@ public class DataModelManager
      */
     public DataModelManager()
     {
-        ControllerComponentInjector.get().inject(this);
+        AppComponentInjector.get().inject(this);
+
     }
 
     /**
@@ -35,5 +40,10 @@ public class DataModelManager
     public Observable<ExchangesDataModel> requestExchangeModel()
     {
         return this.restApiHelper.getUpdatedPricesFromExchanges();
+    }
+
+    public Observable<CoinbaseModel> requestCoinbaseModel()
+    {
+        return this.restApiHelper.getPriceFromCoinbase("BTC");
     }
 }

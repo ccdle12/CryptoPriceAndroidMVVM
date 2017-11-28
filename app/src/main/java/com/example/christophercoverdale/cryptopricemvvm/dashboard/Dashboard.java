@@ -46,5 +46,6 @@ public class Dashboard extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
         AppComponentInjector.get().inject(this);
+
     }
 }
