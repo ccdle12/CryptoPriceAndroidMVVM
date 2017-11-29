@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AppComponentInjector.get().inject(this);
+        AppComponentInjector.get(this).inject(this);
         setupFragmentInContainer();
     }
 

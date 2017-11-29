@@ -1,5 +1,7 @@
 package com.example.christophercoverdale.cryptopricemvvm.datamodel;
 
+import java.util.ArrayList;
+
 /**
  * Created by christophercoverdale on 28/11/2017.
  */
@@ -16,5 +18,11 @@ public class Exchange extends ExchangeParent
     {
         super(exchangeName);
 
+        ArrayList<CoinModel> coinbaseModelList = new ArrayList();
+        coinbaseModelList.add(bitcoin);
+        coinbaseModelList.add(ethereum);
+        coinbaseModelList.add(litecoin);
+
+        addModelToListAndMap(coinbaseModelList);
     }
 }

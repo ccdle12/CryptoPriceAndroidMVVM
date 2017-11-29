@@ -2,10 +2,10 @@ package com.example.christophercoverdale.cryptopricemvvm.datamodelmanager;
 
 import android.support.annotation.NonNull;
 
-import com.example.christophercoverdale.cryptopricemvvm.coinbase.coinbasemodel.CoinbaseModel;
 import com.example.christophercoverdale.cryptopricemvvm.dagger.AppComponentInjector;
 import com.example.christophercoverdale.cryptopricemvvm.datamodel.ExchangesDataModel;
 import com.example.christophercoverdale.cryptopricemvvm.helpers.RestApiHelper;
+import com.example.christophercoverdale.cryptopricemvvm.realmdatabase.DatabaseManager;
 
 import java.util.List;
 
@@ -26,6 +26,10 @@ public class DataModelManager
     @Inject
     public RestApiHelper restApiHelper;
 
+    @NonNull
+    @Inject
+    public DatabaseManager databaseManager;
+
 
     /**
      * Constructor
@@ -41,10 +45,10 @@ public class DataModelManager
      */
     public Observable<ExchangesDataModel> requestExchangeModel()
     {
-        return getUpdatedExchanges();
+        return requestUpdatedExchanges();
     }
 
-    private Observable<ExchangesDataModel> getUpdatedExchanges()
+    private Observable<ExchangesDataModel> requestUpdatedExchanges()
     {
         List<Observable<?>> obsList = this.restApiHelper.getUpdatedPricesFromExchanges();
         return Observable.zip(obsList, (i) -> new ExchangesDataModel(i));

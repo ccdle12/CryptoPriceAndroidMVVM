@@ -1,5 +1,7 @@
 package com.example.christophercoverdale.cryptopricemvvm.dagger;
 
+import android.content.Context;
+
 import com.example.christophercoverdale.cryptopricemvvm.MainActivity;
 import com.example.christophercoverdale.cryptopricemvvm.dashboard.Dashboard;
 import com.example.christophercoverdale.cryptopricemvvm.dashboard.DashboardViewModel;
@@ -17,6 +19,8 @@ import dagger.Component;
 @Component(modules = {AppModule.class})
 public interface AppComponent
 {
+    Context context();
+
     void inject(MainActivity mainActivity);
     void inject(Dashboard dashboard);
 

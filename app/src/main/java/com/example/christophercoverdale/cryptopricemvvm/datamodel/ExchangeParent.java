@@ -12,8 +12,7 @@ import rx.Observable;
  * Created by christophercoverdale on 28/11/2017.
  */
 
-public abstract class ExchangeParent
-{
+public abstract class ExchangeParent {
     /**
      * Instance Variables
      */

@@ -4,6 +4,9 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 
 import com.example.christophercoverdale.cryptopricemvvm.coinbase.coinbasemodel.CoinbaseModel;
+import com.example.christophercoverdale.cryptopricemvvm.datamodel.CoinModel;
+import com.example.christophercoverdale.cryptopricemvvm.datamodel.Exchange;
+import com.example.christophercoverdale.cryptopricemvvm.datamodel.ExchangesDataModel;
 import com.example.christophercoverdale.cryptopricemvvm.helpers.RestApiHelper;
 
 import junit.framework.Assert;
@@ -13,6 +16,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import rx.Observable;
 import rx.observers.TestSubscriber;
@@ -42,19 +48,5 @@ public class DataModelManagerTest
     {
         Assert.assertTrue(dataModelManager != null);
     }
-
-    @Test
-    public void testGetPriceFromCoinbase_returnsCoinbaseModel()
-    {
-        CoinbaseModel coinbaseModel = new CoinbaseModel();
-        coinbaseModel.setBase("BTC");
-
-        Mockito.when(this.restApiHelper.getPriceFromCoinbase("BTC")).thenReturn(Observable.just(coinbaseModel));
-        TestSubscriber<CoinbaseModel> testSubscriber = new TestSubscriber();
-
-        this.restApiHelper.getPriceFromCoinbase("BTC").subscribe(testSubscriber);
-
-        testSubscriber.assertNoErrors();
-        testSubscriber.assertValue(coinbaseModel);
-    }
+    
 }

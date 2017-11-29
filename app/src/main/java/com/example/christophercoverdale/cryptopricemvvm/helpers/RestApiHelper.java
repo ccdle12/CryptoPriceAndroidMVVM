@@ -10,7 +10,6 @@ import com.example.christophercoverdale.cryptopricemvvm.coinbase.coinbasemodel.C
 import com.example.christophercoverdale.cryptopricemvvm.coinbase.coinbasemodel.CoinbaseModel;
 import com.example.christophercoverdale.cryptopricemvvm.dagger.AppComponentInjector;
 import com.example.christophercoverdale.cryptopricemvvm.datamodel.Exchange;
-import com.example.christophercoverdale.cryptopricemvvm.datamodel.ExchangesDataModel;
 import com.example.christophercoverdale.cryptopricemvvm.schedulers.IScheduleProvider;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -77,7 +76,7 @@ public class RestApiHelper
                 Observable.just("Coinbase"),
                 getPriceFromCoinbase("BTC"),
                 getPriceFromCoinbase("ETH"),
-                getPriceFromCoinbase("TC"),
+                getPriceFromCoinbase("LTC"),
                 Exchange::new);
     }
 
@@ -86,9 +85,9 @@ public class RestApiHelper
     {
         return Observable.zip(
                 Observable.just("Bitfinex"),
-                getPriceFromCoinFloor("BTC"),
-                getPriceFromCoinFloor("ETH"),
-                getPriceFromCoinFloor("LTC"),
+                getPriceFromBitfinex("BTC"),
+                getPriceFromBitfinex("ETH"),
+                getPriceFromBitfinex("LTC"),
                 Exchange::new);
     }
 
@@ -101,17 +100,16 @@ public class RestApiHelper
         return retrofit
                 .create(CoinbaseAPIService.class)
                 .getSpotPrice(coin)
-                .subscribeOn(scheduleProvider.computation())
-                .observeOn(scheduleProvider.ui())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn(error -> new CoinbaseModel("Information is currently unavailable", coin))
                 .doOnNext(emittedCoin -> emittedCoin.setSymbol(emittedCoin.getBase()))
                 .doOnNext(emittedCoin1 -> emittedCoin1.setPrice(emittedCoin1.getAmount()));
     }
 
-    public Observable<BitfinexModel> getPriceFromCoinFloor(String coin)
+    public Observable<BitfinexModel> getPriceFromBitfinex(String coin)
     {
         Gson gson = new GsonBuilder().registerTypeAdapter(BitfinexModel.class, new BitfinexDeserializer()).create();
-
         Retrofit retrofit = retrofitInstance("https://api.bitfinex.com/", gson);
 
         return retrofit
@@ -119,6 +117,7 @@ public class RestApiHelper
                 .getSpotPrice(coin)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
+//                .doOnNext(res -> System.out.println("Result: " + res.getLastPrice()))
                 .onErrorReturn(error -> new BitfinexModel("Information is currently unavailable", coin))
                 .doOnNext(emittedCoin -> emittedCoin.setSymbol(coin.toUpperCase()))
                 .doOnNext(emittedCoin1 -> emittedCoin1.setPrice(emittedCoin1.getLastPrice()));
