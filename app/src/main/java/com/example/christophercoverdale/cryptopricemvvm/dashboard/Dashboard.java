@@ -2,7 +2,6 @@ package com.example.christophercoverdale.cryptopricemvvm.dashboard;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.christophercoverdale.cryptopricemvvm.R;
 import com.example.christophercoverdale.cryptopricemvvm.adapters.CoinsSpinnerAdapter;
@@ -20,7 +20,6 @@ import com.example.christophercoverdale.cryptopricemvvm.dagger.AppComponentInjec
 import com.example.christophercoverdale.cryptopricemvvm.datamodel.CoinModel;
 import com.example.christophercoverdale.cryptopricemvvm.datamodel.ExchangeParent;
 import com.example.christophercoverdale.cryptopricemvvm.schedulers.IScheduleProvider;
-import com.example.christophercoverdale.cryptopricemvvm.schedulers.ScheduleProvider;
 
 import java.util.List;
 
@@ -28,8 +27,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -74,7 +71,9 @@ public class Dashboard extends Fragment
     @NonNull
     private CoinsSpinnerAdapter coinsSpinnerAdapter;
 
-
+    @NonNull
+    @Inject
+    Context context;
 
 
     /**
@@ -152,23 +151,36 @@ public class Dashboard extends Fragment
 
     private void bind()
     {
-        this.subscription = new CompositeSubscription();
+        if (dashboardViewModel.isInternetConnected())
+        {
+            this.subscription = new CompositeSubscription();
 
-        this.subscription.add(this.dashboardViewModel.getSupportedExchanges()
-                .subscribeOn(scheduleProvider.io())
-                .observeOn(scheduleProvider.ui())
-                .doOnNext(result -> setLastUpdatedDate(this.dashboardViewModel.getLastUpdatedDate()))
-                .subscribe(this::setExchangesInSpinner));
+            this.subscription.add(this.dashboardViewModel.getSupportedExchanges()
+                    .subscribeOn(scheduleProvider.io())
+                    .observeOn(scheduleProvider.ui())
+                    .doOnNext(result -> setLastUpdatedDate(this.dashboardViewModel.getLastUpdatedDate()))
+                    .subscribe(this::setExchangesInSpinner));
 
-        this.subscription.add(this.dashboardViewModel.getCoins()
-                .subscribeOn(scheduleProvider.io())
-                .observeOn(scheduleProvider.ui())
-                .subscribe(this::setCoinsInSpinner));
+            this.subscription.add(this.dashboardViewModel.getCoins()
+                    .subscribeOn(scheduleProvider.io())
+                    .observeOn(scheduleProvider.ui())
+                    .subscribe(this::setCoinsInSpinner));
 
-        this.subscription.add(this.dashboardViewModel.getPrice()
-                .subscribeOn(scheduleProvider.io())
-                .observeOn(scheduleProvider.ui())
-                .subscribe(this::setPriceInView));
+            this.subscription.add(this.dashboardViewModel.getPrice()
+                    .subscribeOn(scheduleProvider.io())
+                    .observeOn(scheduleProvider.ui())
+                    .subscribe(this::setPriceInView));
+        }
+        else
+        {
+            showNoConnectionToast();
+        }
+    }
+
+    private void showNoConnectionToast()
+    {
+        Toast toast = Toast.makeText(context, "No Internet Connection", Toast.LENGTH_LONG);
+        toast.show();
     }
 
     @Override
@@ -180,7 +192,8 @@ public class Dashboard extends Fragment
 
     private void unbind()
     {
-        this.subscription.unsubscribe();
+        if (dashboardViewModel.isInternetConnected())
+            this.subscription.unsubscribe();
     }
 
 
@@ -223,4 +236,6 @@ public class Dashboard extends Fragment
     {
         lastUpdatedDate.setText(date);
     }
+
+
 }

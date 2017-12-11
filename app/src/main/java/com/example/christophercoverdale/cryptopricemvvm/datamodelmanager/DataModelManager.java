@@ -34,11 +34,6 @@ public class DataModelManager
     public DatabaseManager databaseManager;
 
 
-    @NonNull
-    @Inject
-    Context context;
-
-
     /**
      * Constructor
      */
@@ -52,12 +47,7 @@ public class DataModelManager
      */
     public Observable<ExchangesDataModel> requestExchangeModel()
     {
-        Observable<ExchangesDataModel> requestedExchangeModels = null;
-
-        if (isInternetAvailable())
-            requestedExchangeModels = requestUpdatedExchanges();
-
-        return requestedExchangeModels;
+        return requestUpdatedExchanges();
     }
 
     private Observable<ExchangesDataModel> requestUpdatedExchanges()
@@ -66,15 +56,4 @@ public class DataModelManager
         return Observable.zip(obsList, (i) -> new ExchangesDataModel(i));
     }
 
-
-    private boolean isInternetAvailable()
-    {
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-        return activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-    }
 }

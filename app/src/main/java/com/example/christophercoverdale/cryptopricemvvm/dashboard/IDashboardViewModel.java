@@ -22,4 +22,5 @@ public interface IDashboardViewModel
     void coinSelected(@NonNull final CoinModel coinModel);
     Observable<String> getPrice();
     String getLastUpdatedDate();
+    boolean isInternetConnected();
 }

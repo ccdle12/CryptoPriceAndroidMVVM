@@ -36,7 +36,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // RxJava
     compile 'io.reactivex:rxjava:1.2.1'
@@ -63,7 +63,6 @@ dependencies {
     //Butterknife
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-
 
     testCompile 'junit:junit:4.12'
 }

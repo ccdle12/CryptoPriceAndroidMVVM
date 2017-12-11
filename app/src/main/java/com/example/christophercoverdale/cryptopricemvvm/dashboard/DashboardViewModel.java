@@ -1,5 +1,8 @@
 package com.example.christophercoverdale.cryptopricemvvm.dashboard;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 
 import com.example.christophercoverdale.cryptopricemvvm.dagger.AppComponentInjector;
@@ -34,6 +37,10 @@ public class DashboardViewModel implements IDashboardViewModel
 
     @NonNull
     private final BehaviorSubject<CoinModel> selectedCoin = BehaviorSubject.create();
+
+    @NonNull
+    @Inject
+    Context context;
 
     /**
      * Getters and Setters
@@ -102,5 +109,17 @@ public class DashboardViewModel implements IDashboardViewModel
     public String getLastUpdatedDate()
     {
         return this.exchangesDataModel.getLastUpdatedDate().toString();
+    }
+
+    @Override
+    public boolean isInternetConnected()
+    {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
     }
 }
