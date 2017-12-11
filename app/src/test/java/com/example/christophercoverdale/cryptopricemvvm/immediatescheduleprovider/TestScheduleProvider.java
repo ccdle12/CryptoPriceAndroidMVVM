@@ -23,4 +23,9 @@ public class TestScheduleProvider implements IScheduleProvider
     public Scheduler ui() {
         return null;
     }
+
+    @Override
+    public Scheduler io() {
+        return null;
+    }
 }
