@@ -35,7 +35,6 @@ public class DashboardViewModelTest
     @Mock
     DataModelManager dataModelManager;
 
-    @NonNull
     private DashboardViewModel dashboardViewModel;
 
     @Before

@@ -21,11 +21,11 @@ public class BitfinexDeserializer implements JsonDeserializer<BitfinexModel>
         /**
          * Get the json object from the parsed JSON
          */
-        JsonElement coinFloorModel = json.getAsJsonObject();
+        JsonElement bitfinexModel = json.getAsJsonObject();
 
         /**
          * Deserialize the JsonElement as GSON
          */
-        return new Gson().fromJson(coinFloorModel, BitfinexModel.class);
+        return new Gson().fromJson(bitfinexModel, BitfinexModel.class);
     }
 }

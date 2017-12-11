@@ -237,17 +237,17 @@ public class Dashboard extends Fragment
 
     private void setPriceInView(@NonNull final String price)
     {
-        coinPrice.setText("$" + price);
+        coinPrice.setText(price);
     }
 
 
-    private void exchangeSelected(@NonNull final int position)
+    private void exchangeSelected(final int position)
     {
         ExchangeParent parentExchange = this.exchangesSpinnerAdapter.getItem(position);
         this.dashboardViewModel.exchangeSelected(parentExchange);
     }
 
-    private void coinSelected(@NonNull final int position)
+    private void coinSelected(final int position)
     {
         CoinModel coinModelSelected = this.coinsSpinnerAdapter.getItem(position);
         this.dashboardViewModel.coinSelected(coinModelSelected);

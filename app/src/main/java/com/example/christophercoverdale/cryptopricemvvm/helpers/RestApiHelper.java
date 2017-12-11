@@ -5,6 +5,9 @@ import android.support.annotation.NonNull;
 import com.example.christophercoverdale.cryptopricemvvm.bitfinex.apiservice.BitfinexAPIService;
 import com.example.christophercoverdale.cryptopricemvvm.bitfinex.bitfinexmodel.BitfinexDeserializer;
 import com.example.christophercoverdale.cryptopricemvvm.bitfinex.bitfinexmodel.BitfinexModel;
+import com.example.christophercoverdale.cryptopricemvvm.bitstamp.apiservice.BitStampAPIService;
+import com.example.christophercoverdale.cryptopricemvvm.bitstamp.bitstampmodel.BitStampDeserializer;
+import com.example.christophercoverdale.cryptopricemvvm.bitstamp.bitstampmodel.BitStampModel;
 import com.example.christophercoverdale.cryptopricemvvm.coinbase.apiservice.CoinbaseAPIService;
 import com.example.christophercoverdale.cryptopricemvvm.coinbase.coinbasemodel.CoinbaseDeserializer;
 import com.example.christophercoverdale.cryptopricemvvm.coinbase.coinbasemodel.CoinbaseModel;
@@ -23,8 +26,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by christophercoverdale on 23/11/2017.
@@ -65,7 +66,7 @@ public class RestApiHelper
     @NonNull
     public List<Observable<?>> getUpdatedPricesFromExchanges()
     {
-        return Arrays.asList(getCoinbaseExchange(), getBitfinexExchange());
+        return Arrays.asList(getBitfinexExchange(), getBitStampExchange(), getCoinbaseExchange());
     }
 
     @NonNull
@@ -91,7 +92,21 @@ public class RestApiHelper
                 Exchange::new);
     }
 
+    @NonNull
+    public Observable<Exchange> getBitStampExchange()
+    {
+        return Observable.zip(
+                Observable.just("Bitstamp"),
+                getPriceFromBitStamp("btc"),
+                getPriceFromBitStamp("eth"),
+                getPriceFromBitStamp("ltc"),
+                Exchange::new);
+    }
 
+
+    /**
+     * Observable Models for each Exchange
+     */
     public Observable<CoinbaseModel> getPriceFromCoinbase(String coin)
     {
         Gson gson = new GsonBuilder().registerTypeAdapter(CoinbaseModel.class, new CoinbaseDeserializer()).create();
@@ -120,6 +135,21 @@ public class RestApiHelper
                 .onErrorReturn(error -> new BitfinexModel("Information is currently unavailable", coin))
                 .doOnNext(emittedCoin -> emittedCoin.setSymbol(coin.toUpperCase()))
                 .doOnNext(emittedCoin1 -> emittedCoin1.setPrice(emittedCoin1.getLastPrice()));
+    }
+
+    public Observable<BitStampModel> getPriceFromBitStamp(String coin)
+    {
+        Gson gson = new GsonBuilder().registerTypeAdapter(BitStampModel.class, new BitStampDeserializer()).create();
+        Retrofit retrofit = retrofitInstance("https://www.bitstamp.net/", gson);
+
+        return retrofit
+                .create(BitStampAPIService.class)
+                .getSpotPrice(coin)
+                .subscribeOn(scheduleProvider.io())
+                .observeOn(scheduleProvider.ui())
+                .onErrorReturn(error -> new BitStampModel("Information is currently unavailable", coin))
+                .doOnNext(emittedCoin -> emittedCoin.setSymbol(coin.toUpperCase()))
+                .doOnNext(emittedCoin1 -> emittedCoin1.setPrice(emittedCoin1.getLast()));
     }
 
 }

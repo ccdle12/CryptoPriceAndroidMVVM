@@ -102,7 +102,8 @@ public class DashboardViewModel implements IDashboardViewModel
     public Observable<String> getPrice()
     {
         return this.selectedCoin
-                .map(CoinModel::getPrice);
+                .map(CoinModel::getPrice)
+                .flatMap(price -> Observable.just("$" + price));
     }
 
     @Override
