@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -66,6 +68,10 @@ public class Dashboard extends Fragment
     TextView lastUpdatedDate;
 
     @NonNull
+    @BindView(R.id.swipe_container)
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    @NonNull
     private ExchangesSpinnerAdapter exchangesSpinnerAdapter;
 
     @NonNull
@@ -103,6 +109,7 @@ public class Dashboard extends Fragment
     {
         setupExchangeSpinnerListener();
         setupCoinSpinnerListener();
+        setupSwipeRefreshListener();
     }
 
     private void setupExchangeSpinnerListener()
@@ -141,6 +148,18 @@ public class Dashboard extends Fragment
         });
     }
 
+    private void setupSwipeRefreshListener()
+    {
+        this.swipeRefreshLayout.setOnRefreshListener(() ->
+        {
+            if (this.subscription != null)
+                this.subscription.unsubscribe();
+
+            this.bind()
+                    .subscribe(callback -> this.swipeRefreshLayout.setRefreshing(false));
+        });
+    }
+
 
     @Override
     public void onResume()
@@ -149,7 +168,7 @@ public class Dashboard extends Fragment
         bind();
     }
 
-    private void bind()
+    private Observable<Boolean> bind()
     {
         if (dashboardViewModel.isInternetConnected())
         {
@@ -175,6 +194,8 @@ public class Dashboard extends Fragment
         {
             showNoConnectionToast();
         }
+
+        return Observable.just(true);
     }
 
     private void showNoConnectionToast()
