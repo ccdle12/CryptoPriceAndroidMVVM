@@ -9,7 +9,7 @@ import rx.Scheduler;
 public interface IScheduleProvider
 {
     Scheduler computation();
-
     Scheduler ui();
+    Scheduler io();
 
 }

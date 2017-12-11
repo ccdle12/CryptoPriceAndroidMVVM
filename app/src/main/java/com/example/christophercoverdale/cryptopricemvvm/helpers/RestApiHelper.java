@@ -100,8 +100,8 @@ public class RestApiHelper
         return retrofit
                 .create(CoinbaseAPIService.class)
                 .getSpotPrice(coin)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(scheduleProvider.io())
+                .observeOn(scheduleProvider.ui())
                 .onErrorReturn(error -> new CoinbaseModel("Information is currently unavailable", coin))
                 .doOnNext(emittedCoin -> emittedCoin.setSymbol(emittedCoin.getBase()))
                 .doOnNext(emittedCoin1 -> emittedCoin1.setPrice(emittedCoin1.getAmount()));
@@ -115,9 +115,8 @@ public class RestApiHelper
         return retrofit
                 .create(BitfinexAPIService.class)
                 .getSpotPrice(coin)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-//                .doOnNext(res -> System.out.println("Result: " + res.getLastPrice()))
+                .subscribeOn(scheduleProvider.io())
+                .observeOn(scheduleProvider.ui())
                 .onErrorReturn(error -> new BitfinexModel("Information is currently unavailable", coin))
                 .doOnNext(emittedCoin -> emittedCoin.setSymbol(coin.toUpperCase()))
                 .doOnNext(emittedCoin1 -> emittedCoin1.setPrice(emittedCoin1.getLastPrice()));

@@ -18,11 +18,15 @@
 
     <TextView
         android:id="@+id/coin_price_text_view"
+        android:textSize="25sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 
     <TextView
         android:id="@+id/last_updated_date"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/coin_price_text_view"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>

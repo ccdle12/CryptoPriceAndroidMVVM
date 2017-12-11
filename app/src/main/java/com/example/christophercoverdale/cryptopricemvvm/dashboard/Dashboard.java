@@ -19,6 +19,8 @@ import com.example.christophercoverdale.cryptopricemvvm.adapters.ExchangesSpinne
 import com.example.christophercoverdale.cryptopricemvvm.dagger.AppComponentInjector;
 import com.example.christophercoverdale.cryptopricemvvm.datamodel.CoinModel;
 import com.example.christophercoverdale.cryptopricemvvm.datamodel.ExchangeParent;
+import com.example.christophercoverdale.cryptopricemvvm.schedulers.IScheduleProvider;
+import com.example.christophercoverdale.cryptopricemvvm.schedulers.ScheduleProvider;
 
 import java.util.List;
 
@@ -44,6 +46,10 @@ public class Dashboard extends Fragment
     IDashboardViewModel dashboardViewModel;
 
     @NonNull
+    @Inject
+    IScheduleProvider scheduleProvider;
+
+    @NonNull
     CompositeSubscription subscription;
 
     @NonNull
@@ -67,6 +73,8 @@ public class Dashboard extends Fragment
 
     @NonNull
     private CoinsSpinnerAdapter coinsSpinnerAdapter;
+
+
 
 
     /**
@@ -147,19 +155,19 @@ public class Dashboard extends Fragment
         this.subscription = new CompositeSubscription();
 
         this.subscription.add(this.dashboardViewModel.getSupportedExchanges()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(scheduleProvider.io())
+                .observeOn(scheduleProvider.ui())
                 .doOnNext(result -> setLastUpdatedDate(this.dashboardViewModel.getLastUpdatedDate()))
                 .subscribe(this::setExchangesInSpinner));
 
         this.subscription.add(this.dashboardViewModel.getCoins()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(scheduleProvider.io())
+                .observeOn(scheduleProvider.ui())
                 .subscribe(this::setCoinsInSpinner));
 
         this.subscription.add(this.dashboardViewModel.getPrice()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(scheduleProvider.io())
+                .observeOn(scheduleProvider.ui())
                 .subscribe(this::setPriceInView));
     }
 
@@ -195,7 +203,7 @@ public class Dashboard extends Fragment
 
     private void setPriceInView(@NonNull final String price)
     {
-        coinPrice.setText(price);
+        coinPrice.setText("$" + price);
     }
 
 

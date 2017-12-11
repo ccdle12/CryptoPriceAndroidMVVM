@@ -40,4 +40,10 @@ public class ScheduleProvider implements IScheduleProvider
     {
         return AndroidSchedulers.mainThread();
     }
+
+    @Override
+    public Scheduler io()
+    {
+        return Schedulers.io();
+    }
 }
