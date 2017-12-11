@@ -1,5 +1,8 @@
 package com.example.christophercoverdale.cryptopricemvvm.datamodelmanager;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 
 import com.example.christophercoverdale.cryptopricemvvm.dagger.AppComponentInjector;
@@ -31,13 +34,17 @@ public class DataModelManager
     public DatabaseManager databaseManager;
 
 
+    @NonNull
+    @Inject
+    Context context;
+
+
     /**
      * Constructor
      */
     public DataModelManager()
     {
         AppComponentInjector.get().inject(this);
-
     }
 
     /**
@@ -45,12 +52,29 @@ public class DataModelManager
      */
     public Observable<ExchangesDataModel> requestExchangeModel()
     {
-        return requestUpdatedExchanges();
+        Observable<ExchangesDataModel> requestedExchangeModels = null;
+
+        if (isInternetAvailable())
+            requestedExchangeModels = requestUpdatedExchanges();
+
+        return requestedExchangeModels;
     }
 
     private Observable<ExchangesDataModel> requestUpdatedExchanges()
     {
         List<Observable<?>> obsList = this.restApiHelper.getUpdatedPricesFromExchanges();
         return Observable.zip(obsList, (i) -> new ExchangesDataModel(i));
+    }
+
+
+    private boolean isInternetAvailable()
+    {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
     }
 }

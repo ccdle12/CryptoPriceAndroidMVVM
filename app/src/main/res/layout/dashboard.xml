@@ -5,20 +5,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/exchanges_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:textSize="25sp"
+        android:text="Exchanges"
+        android:layout_centerHorizontal="true"/>
+
     <Spinner
         android:id="@+id/exchanges_spinner"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/exchanges_title"/>
+
+
+
+    <TextView
+        android:id="@+id/coin_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="25sp"
+        android:text="Coins"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/exchanges_spinner"/>
 
     <Spinner
         android:id="@+id/coins_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/exchanges_spinner"/>
+        android:layout_below="@+id/coin_title"
+        android:layout_centerHorizontal="true"/>
+
+
 
     <TextView
         android:id="@+id/coin_price_text_view"
-        android:textSize="25sp"
+        android:textSize="50sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"/>
@@ -28,5 +54,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/coin_price_text_view"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerInParent="true"/>
+
 </RelativeLayout>
